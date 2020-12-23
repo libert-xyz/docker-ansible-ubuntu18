@@ -3,6 +3,7 @@
 [![Docker Automated build](https://img.shields.io/docker/automated/libertxyz/docker-ansible-ubuntu18.svg?maxAge=2592000)](https://hub.docker.com/r/libertxyz/docker-ansible-ubuntu18)
 
 
+[![CI](https://github.com/libert-xyz/docker-ansible-ubuntu18/workflows/Build/badge.svg?branch=master&event=push)](https://github.com/libert-xyz/docker-ansible-ubuntu18/actions?query=workflow%3ABuild)
 
 [![Build Status](https://travis-ci.com/libert-xyz/docker-ansible-ubuntu18.svg?branch=master)](https://travis-ci.com/libert-xyz/docker-ansible-ubuntu18)
 
@@ -26,12 +27,17 @@ You can add the Docker image as part of Molecule
 platforms:
   - name: instance
     image: libertxyz/docker-ansible-ubuntu18:latest
-    command: /sbin/init
+    command: /lib/systemd/systemd
     tmpfs:
       - /run
       - /tmp
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: True
+provisioner:
+  name: ansible
+verifier:
+  name: ansible
 ```
 
 ## Notes
