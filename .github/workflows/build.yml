@@ -1,0 +1,27 @@
+---
+name: Build
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: "11 1 11 * *"
+
+jobs:
+  # Test the image builds and works correctly.
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Test building image.
+        run: docker build -t docker-ansible-ubuntu18 .
+
+      - name: Run the built image.
+        run: docker run --name ubuntu18-container -d --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro docker-ansible-ubuntu18
+      - name: Verify Ansible is accessible in the built image.
+        run: docker exec --tty ubuntu18-container env TERM=xterm ansible --version
